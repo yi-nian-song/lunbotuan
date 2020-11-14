@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>轮播图</title>
+	<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+	<div class="wrapper"id="box">
+		<div class="box" >
+			<ul class = 'imgbox'>
+				<li class = "imgshow active"><img src="img/1.jpg" alt=""></li>
+				<li class = "imgshow"><img src="img/2.jpg" alt=""></li>
+				<li class = "imgshow"><img src="img/3.jpg" alt=""></li>
+				<li class = "imgshow"><img src="img/4.jpg" alt=""></li>
+			</ul>
+		</div>
+		<div class="next" id="next"></div>
+		<div class="last" id="pre"></div>
+		<div class="dot">
+			<ul>
+				<li class = 'point act' date-index='0'><a href="#"></a></li>
+				<li class="point" date-index='1'><a href="#"></a></li>
+				<li class="point" date-index='2'><a href="#"></a></li>
+				<li class="point" date-index='3'><a href="#"></a></li>
+			</ul>
+		</div>
+	</div>
+</body>
+
+<script >
+	
+	var items = document.getElementsByClassName("imgshow");
+	var nextBtn =document.getElementById("next");
+	var preBtn =document.getElementById("pre");
+	var points = document.getElementsByClassName('point');
+	var box = document.getElementById('box');
+	var index = 0;
+	var time =0;
+    var clearActive =function(){//清楚原有样式
+
+		 for(let i =0;i<items.length;i++){
+		 	items[i].className="imgshow";
+		 }
+		 for(let i =0;i<points.length;i++){
+		 	points[i].className="point";
+		 }
+	}
+	var  goIndex =function() {//添加新样式
+		clearActive();
+		points[index].className = "point act";
+		items[index].className = "imgshow active";
+	}
+	var goNext= function(){
+		if( index < 3){
+			index++
+		}else{
+			index=0
+		}
+		goIndex();
+	}
+	 var goPre =function (){
+		if (index==0) {
+			index=3
+		}else{
+			index--
+		}
+		goIndex();
+	}
+	nextBtn.addEventListener("click",function(){
+		goNext()
+	})
+	preBtn.addEventListener("click",function(){
+		goPre()
+	})
+	for (var i = 0; i < points.length; i++) {
+		points[i].addEventListener('click',function(){
+			var pointIndex=this.getAttribute('date-index');//获取对应索引值
+			index= pointIndex;
+			goIndex();
+		})
+	}
+	var autoPlay =function(){
+		time=setInterval(function(){
+		nextBtn.click();
+		},2000)
+	}
+	autoPlay();
+	// function debouce( fn,delay){
+	// 	let time= null;
+
+	// 	return function(){
+	// 		if(time) clearTimeout(time)
+	// 		time =setTimeout(function(){
+	// 			fn();
+	// 		},delay)
+	// 	}
+	// }
+	 box.addEventListener('mouseover',function(){
+	 	clearTimeout(time);
+	 	nextBtn.style.display='block';
+	 	preBtn.style.display='block';
+
+	 })
+	  box.addEventListener('mouseout',function(){
+	 	autoPlay();
+	 	nextBtn.style.display='none';
+	 	preBtn.style.display='none';
+	 })
+
+</script>
+</html>
